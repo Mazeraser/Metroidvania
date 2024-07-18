@@ -28,8 +28,7 @@ namespace Assets.Codebase.Mechanics.MoveSystem
 
             //Non-physical realization, moves body through coordinate system, uses teleportation
             // so that the speed would be stable in any case
-            // and given that we call from FixedUpdate we multiply by fixedDeltaTime. 
-            // Thanks to FixedUpdate there will be no twitching when fps drops
+            // and given that we call from FixedUpdate we multiply by fixedDeltaTime.
             //transform.Translate(movement * speed * Time.fixedDeltaTime);
 
             /*

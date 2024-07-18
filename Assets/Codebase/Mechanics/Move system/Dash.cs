@@ -7,8 +7,6 @@ namespace Assets.Codebase.Mechanics.MoveSystem
 
     public class Dash : MovableParent, IMovable
     {
-        //TODO: add side changer
-        
         [SerializeField]
         private float _dashPower;
         public float Speed { get { return _dashPower; } }
@@ -19,6 +17,8 @@ namespace Assets.Codebase.Mechanics.MoveSystem
         private float timer;
 
         private bool _isRecovery;
+
+        private bool _itTurnedOnRight;
 
         public override void Start()
         {
