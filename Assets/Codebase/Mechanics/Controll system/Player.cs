@@ -23,12 +23,9 @@ namespace Assets.Codebase.Mechanics.ControllSystem
         {
             inputAction = new Main();
 
-            inputAction.Move.Jump.performed += context => _character.SetAnimationTrigger("Jump");
             inputAction.Move.Dash.performed += context => Dash();
             inputAction.Move.Attack.performed += context => Attack();
             inputAction.Move.Shield.performed += context => Shield(); 
-            
-            GetComponent<Jump>().Grounded += delegate { _character.SetAnimationTrigger("Idle"); };
         }
         private void OnEnable()
         {
@@ -46,9 +43,6 @@ namespace Assets.Codebase.Mechanics.ControllSystem
 
         private void FixedUpdate()
         {
-            _character.SetAnimationBoolean("IsTurnedOnRight", _isTurnedOnRight);
-            _character.SetAnimationBoolean("Grounded", GetComponent<Jump>().IsGrounded);
-
             ControllMove(inputAction.Move.Move.ReadValue<Vector2>());
 
             if (inputAction.Move.Jump.ReadValue<float>() != 0f && !_jumped)
@@ -71,12 +65,9 @@ namespace Assets.Codebase.Mechanics.ControllSystem
         {
             _character.Move(direction, GetComponent<Walk>());
 
-            _character.SetMoveValue(GetComponent<Rigidbody2D>().velocity);
             if (direction.x > 0)
                 _isTurnedOnRight = true;
-            else if (direction.x == 0)
-                _character.SetAnimationTrigger("Idle");
-            else
+            else if(direction.x < 0)
                 _isTurnedOnRight = false;
         }
         private void Jump(Vector2 direction)
@@ -88,18 +79,15 @@ namespace Assets.Codebase.Mechanics.ControllSystem
         }
         private void Dash()
         {
-            _character.Move(new Vector2(_isTurnedOnRight?1:-1,0), GetComponent<Dash>()); 
-            _character.SetAnimationTrigger("Dash");
+            _character.Move(new Vector2(_isTurnedOnRight?1:-1,0), GetComponent<Dash>());
         }
         private void Attack()
         {
             Debug.Log("Player is attacking"); 
-            _character.SetAnimationTrigger("Attack");
         }
         private void Shield()
         {
             Debug.Log("Player is using shield");
-            _character.SetAnimationTrigger("Shield");
         }
     }
 }

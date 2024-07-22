@@ -1,17 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
+using Assets.Codebase.Mechanics.AnimationSystem;
+using Assets.Codebase.Mechanics.ControllSystem;
 using Assets.Codebase.Mechanics.MoveSystem;
 using UnityEngine;
 
 namespace Assets.Codebase.Infrastructure
 {
+    [RequireComponent(typeof(CharacterAnimator))]
+    [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(IControllable))]
+    [RequireComponent(typeof(IMovable))]
     public class Character : MonoBehaviour
     {
-        private Animator _animator;
+        private CharacterAnimator _animator;
+        private Rigidbody2D _rb;
 
         private void Start()
         {
-            _animator = GetComponent<Animator>();
+            _animator = GetComponent<CharacterAnimator>();
+            _rb = GetComponent<Rigidbody2D>();
+
+            foreach (var movableComponent in GetComponents<MovableParent>())
+                movableComponent.MoveDelegate = delegate { _animator.LastMoveName = movableComponent.GetType().Name; };
+        }
+        private void Update()
+        {
+            _animator.SetPhysicInteraction(_rb.velocity);
         }
 
         public void Move(Vector2 direction, IMovable movable)
@@ -21,20 +34,6 @@ namespace Assets.Codebase.Infrastructure
         public void Move(Vector2 direction)
         {
             GetComponent<IMovable>().Turn(direction);
-        }
-
-        public void SetAnimationTrigger(string trigger_name)
-        {
-            _animator?.SetTrigger(trigger_name);
-        }
-        public void SetAnimationBoolean(string bool_name, bool value) 
-        {
-            _animator?.SetBool(bool_name, value);
-        }
-        public void SetMoveValue(Vector2 value)
-        {
-            _animator?.SetFloat("horizontal", value.x);
-            _animator?.SetFloat("vertical", value.y);
         }
     }
 }

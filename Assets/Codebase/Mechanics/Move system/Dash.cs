@@ -43,7 +43,7 @@ namespace Assets.Codebase.Mechanics.MoveSystem
         {
             if (!_isRecovery)
             {
-                Jump(new Vector2(direction.x>0?1:-1, 0), _dashPower);
+                Move(new Vector2(direction.x>0?1:-1, 0), _dashPower);
                 _isRecovery = true;
                 timer = 0;
             }

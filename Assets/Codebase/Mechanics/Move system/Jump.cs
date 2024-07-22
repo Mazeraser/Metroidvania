@@ -16,9 +16,6 @@ namespace Assets.Codebase.Mechanics.MoveSystem
         [SerializeField]
         private bool _ignoreGrounding;
 
-        public delegate void IsGroundedAction();
-        public IsGroundedAction Grounded;
-
         private bool _isGrounded;
         public bool IsGrounded
         {
@@ -47,13 +44,11 @@ namespace Assets.Codebase.Mechanics.MoveSystem
         public void Turn(Vector2 direction)
         {
             if (_isGrounded||_ignoreGrounding)
-                Jump(Vector2.up, _jumpPower);
+                Move(Vector2.up, _jumpPower);
         }
         private void OnTriggerEnter2D(Collider2D collision)
         {
             _isGrounded = collision.gameObject.tag == "Ground";
-            if(_isGrounded)
-                Grounded();
         }
         private void OnTriggerExit2D(Collider2D collision)
         {
